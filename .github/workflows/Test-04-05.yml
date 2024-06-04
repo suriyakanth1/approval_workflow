@@ -13,7 +13,21 @@
                   uses: actions/checkout@v3  
             
  
-    #---------------- Orchestration 
+    #---------------- APPROVAL_WORKFLOW
+          APPROVAL_WORKFLOW:
+            needs: [build]
+            runs-on: ubuntu-latest
+            permissions:
+               issues: write
+            steps:
+               - uses: trstringer/manual-approval@v1
+                 with:
+                   secret: ${{ secrets.GITHUB_TOKEN }}
+                   approvers: suriyakanth1
+                   issue-title: "Manual Approval"
+                   issue-body: "run_id: ${{ github.run_id }}"
+ 
+    #---------------- ORCHESTRATION
           ORCHESTRATION:
             needs: [APPROVAL_WORKFLOW]
             runs-on: ubuntu-latest
